@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=42.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "venvfromfile"
+authors = [
+    {name = "devds96", email = "src.devds96@gmail.com"}
+]
+license = {text = "MIT"}
+description = "Construct a virtual environment (venv) from a configuration file."
+requires-python = ">=3.7"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dynamic = [
+    "dependencies",
+    "readme",
+    "version",
+    "optional-dependencies"
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "venvfromfile.__version__"}
+readme = {file = ["README.md"]}
+dependencies = {file = ["requirements.txt"]}
+optional-dependencies = {tests = { file = ["requirements_tests.txt"] }}
+
+[tool.pytest.ini_options]
+addopts = "--cov=venvfromfile --cov-report term-missing"
+testpaths = [
+    "tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = [
+    "venvfromfile"
+]
+omit = [
+    "*/venvfromfile/__main__.py",
+    "*/venvfromfile/__init__.py",
+    "*/venvfromfile/builder.py",
+    "*/venvfromfile/conf.py"
+]
+
+[tool.coverage.report]
+exclude_also = [
+    "@_?overload"
+]

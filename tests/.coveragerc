@@ -1,0 +1,10 @@
+[run]
+branch = True
+source = venvfromfile
+omit =
+    */venvfromfile/__main__.py
+    */venvfromfile/__init__.py
+    */venvfromfile/builder.py
+    */venvfromfile/conf.py
+    */venvfromfile/exceptions.py
+    */venvfromfile/dataclasses_portability

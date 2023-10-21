@@ -1,0 +1,9 @@
+hypothesis
+hypothesis-fspaths
+more_itertools
+pydantic
+pydantic-yaml
+pytest
+pytest-cov
+tox
+typing_extensions;python_version<"3.11"

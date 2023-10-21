@@ -1,0 +1,7 @@
+min_version: ">=3.7"
+venv_configs:
+  - directory: venv_devel@venvfromfile
+    requirement_files:
+    - requirements_tests.txt
+    pth_paths:
+    - src

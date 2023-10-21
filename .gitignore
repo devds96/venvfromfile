@@ -1,0 +1,10 @@
+__pycache__
+.coverage
+.DS_Store
+.hypothesis
+.mypy_cache
+.pytest_cache
+.tox
+*.egg-info
+build
+venv_devel@venvfromfile

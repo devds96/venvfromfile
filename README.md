@@ -58,12 +58,12 @@ venv_configs:
     max_version: "<=3.7"
   - directory: py38_39
     min_version: ">=3.8"
-    max_version: "<3.9"
+    max_version: "<3.10"
 ```
 This would construct a plain virtual environment without any
 requirements in the "py37" directory if Python version 3.7 or below
 is used and in the "py38_39" directory if the Python version is above
-3.8 and strictly below 3.9. Note that the first comparison will only
+3.8 and strictly below 3.10. Note that the first comparison will only
 hold for Python version 3.7 exactly, since the entire config only
 applies to Python versions 3.7 and above.
 

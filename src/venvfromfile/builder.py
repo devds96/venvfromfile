@@ -78,7 +78,8 @@ class EnvContext:
 
         ccargs = (self.env_exe,) + self._PIP_INSTALL + args
         _logger.debug(f"Performing pip install with command {ccargs!r}.")
-        _subprocess.run(ccargs, capture_output=True, check=True)
+        _logger.info("Launching pip to install dependencies.")
+        _subprocess.check_call(ccargs, text=True)
 
     def find_site_dir(self) -> str:
         """Resolve the site directory of the created virtual

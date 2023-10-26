@@ -160,6 +160,22 @@ class EnvBuilder(_venv.EnvBuilder, _conf.VenvConfigExtraDef):
     _REQUIREMENTS_TXT = "requirements.txt"
 
     def __init__(self, conf_path: str, conf: _conf.VenvConfig):
+        """Create a new `EnvBuilder` for the construction of virtual
+        environments.
+
+        Args:
+            conf_path (str): The path to the configuration path.
+            conf (VenvConfig): The configuration for the virtual
+                environment.
+
+        Raises:
+            UseSymlinksException: If the current Python version does not
+                support the creation of virtual environments without
+                using symlink, but this is requested in the
+                configuration.
+            UnsupportedArgument: If parameters are specified in `conf`
+                which are not supported by the current Python version.
+        """
         # Collect overrides for certain fields.
         overrides: _Dict[str, object] = dict()
 
@@ -194,6 +210,13 @@ class EnvBuilder(_venv.EnvBuilder, _conf.VenvConfigExtraDef):
         super().__init__(**kwargs)
 
     def create(self, env_dir: _Union[str, bytes, _PathLike]):
+        """The function called in order to create the virtual
+        environment.
+
+        Args:
+            env_dir (Union[str, bytes, PathLike]): The directory in
+                which to create the virtual environment.
+        """
         env_dir = _path_util.to_str_path(env_dir)
         if not _ospath.isabs(env_dir):
             env_dir = self._resolve_rel_path(env_dir)
@@ -231,6 +254,16 @@ class EnvBuilder(_venv.EnvBuilder, _conf.VenvConfigExtraDef):
         return super_res
 
     def _resolve_rel_path(self, path: str) -> str:
+        """Resolve a relative path relative to the directory containing
+        the configuration file.
+
+        Args:
+            path (str): The path to resolve.
+
+        Returns:
+            str: The absolute path, that is, `path` relative to the
+                directory containing the config file.
+        """
         return _path_util.resolve_rel_path(self.conf_dir, path)
 
     def _remove_existing_pth_paths(

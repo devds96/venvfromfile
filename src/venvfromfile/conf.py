@@ -171,7 +171,7 @@ class VenvConfigExtraDef:
             return _pyver.PyVerComparison.parse_min_version(value)
         except ValueError:
             raise
-        except (TypeError,) as e:
+        except TypeError as e:
             raise ValueError(f"(from {type(e).__name__}) {str(e)}")
 
     @_field_validator("max_version", mode="before")
@@ -186,7 +186,7 @@ class VenvConfigExtraDef:
             return _pyver.PyVerComparison.parse_max_version(value)
         except ValueError:
             raise
-        except (TypeError,) as e:
+        except TypeError as e:
             raise ValueError(f"(from {type(e).__name__}) {str(e)}")
 
 

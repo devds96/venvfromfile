@@ -13,11 +13,16 @@ from typing import ClassVar as _ClassVar, Optional as _Optional, \
 
 if _sys.version_info >= (3, 8):  # pragma: no cover
     import typing as _typing
-    from typing import final as _final, \
-        Literal as _Literal
+    from typing import final as _final, Literal as _Literal
 else:  # pragma: no cover
-    from typing_extensions import final as _final, \
-        Literal as _Literal
+    from typing_extensions import final as _final  # type: ignore [assignment] # noqa: E501
+    from typing_extensions import Literal as _Literal  # type: ignore [assignment] # noqa: E501
+
+if _sys.version_info >= (3, 10):  # pragma: no cover
+    from typing import TypeGuard as _TypeGuard
+else:  # pragma: no cover
+    from typing_extensions import TypeGuard as _TypeGuard  # type: ignore [assignment] # noqa: E501,F811
+
 
 from ._dataclasses_portability import dataclass as _dataclass
 
@@ -60,7 +65,7 @@ def format_version_info(vit: VersionInfo) -> str:
 _RELEASE_LEVELS = (
     _typing.get_args(ReleaseLevel)
 ) if _sys.version_info >= (3, 8) else (
-    ReleaseLevel.__args__
+    ReleaseLevel.__args__  # type: ignore [attr-defined]
 )
 """The release levels."""
 
@@ -118,7 +123,7 @@ def parse_pyversion(ver_str: str) -> VersionInfo:
 
     ops = (handle_int,) * 3 + (handle_release, handle_int)
     result = tuple(map(lambda fs: fs[0](fs[1]), zip(ops, splt)))
-    return result
+    return result  # type: ignore [return-value]
 
 
 ComparisonOperator = _Literal['>', '<', ">=", "<="]  # noqa: F722
@@ -142,7 +147,7 @@ class PyVerComparison:
     OPERATORS: _ClassVar[_Tuple[ComparisonOperator]] = (
         _typing.get_args(ComparisonOperator)
     ) if _sys.version_info >= (3, 8) else (
-        ComparisonOperator.__args__
+        ComparisonOperator.__args__  # type: ignore [attr-defined]
     )
     """The comparison operators."""
 
@@ -166,6 +171,19 @@ class PyVerComparison:
 
     _WHITESPACE_RE = _re.compile(r"\s+", _re.UNICODE)
     """A regex to match whitespace."""
+
+    @classmethod
+    def _is_operator_str(cls, s: str) -> _TypeGuard[ComparisonOperator]:
+        """Check if the provided `str` is a `ComparisonOperator`.
+
+        Args:
+            s (str): The str to check.
+
+        Returns:
+            TypeGuard[ComparisonOperator]: Whether `s` is a valid
+                `ComparisonOperator`.
+        """
+        return s in cls.OPERATORS
 
     @classmethod
     def parse(
@@ -201,7 +219,7 @@ class PyVerComparison:
             operator = text[0]
             rest = text[1:]
 
-        if operator not in cls.OPERATORS:
+        if not cls._is_operator_str(operator):
             raise ValueError(f"Invalid comparison operator {operator!r}.")
         if (coerce_ops is not None) and (operator not in coerce_ops):
             raise ValueError(

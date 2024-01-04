@@ -38,6 +38,7 @@ class VerInfo:
         if length >= 3:
             ltxt.append(f".{next(it)}")
         if length >= 4:
+            rl: Union[str, int]
             rl = next(it)
             if rl_quote is not None:
                 rl = f"{rl_quote}{rl}{rl_quote}"
@@ -73,7 +74,7 @@ class VerInfo:
             res.append(draw(sampled_from(RELEASE_LEVELS)))
         if length >= 5:
             res.append(draw(pos_ints))
-        return cls(tuple(res))
+        return cls(tuple(res))  # type: ignore [arg-type]
 
 
 @composite
@@ -109,7 +110,8 @@ def invalid_release_version_info_str(draw: DrawFn) -> str:
         lists(integers(0), min_size=4, max_size=5)
     )
     v.insert(3, rl)
-    return _pyver.format_version_info(tuple(v))
+    vit = tuple(v)
+    return _pyver.format_version_info(vit)  # type: ignore [arg-type]
 
 
 @composite
@@ -367,7 +369,9 @@ class TestPyVerComparison:
             exception.
             """
             with pytest.raises(TypeError, match=".*was not a str.*"):
-                _pyver.PyVerComparison.parse_min_version(value)
+                _pyver.PyVerComparison.parse_min_version(
+                    value  # type: ignore [arg-type]
+                )
 
     class TestParseMaxVersion:
         """Tests for the `parse_max_version` function."""
@@ -399,4 +403,6 @@ class TestPyVerComparison:
             exception.
             """
             with pytest.raises(TypeError, match=".*was not a str.*"):
-                _pyver.PyVerComparison.parse_max_version(value)
+                _pyver.PyVerComparison.parse_max_version(
+                    value  # type: ignore [arg-type]
+                )

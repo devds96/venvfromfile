@@ -4,7 +4,8 @@ from hypothesis.strategies import booleans, composite, DrawFn, integers, \
     just, one_of
 from typing import Dict, Type, Union
 
-from venvfromfile import _dataclasses_portability
+from venvfromfile._dataclasses_portability import dataclass \
+    as dataclass_portable
 
 
 class Unset:
@@ -86,8 +87,12 @@ class ArgumentSpec:
         """A hypothesis strategy constructing valid instances of the
         `ArgumentSpec` class.
         """
+
+        def get_value(t):
+            return draw(cls._STRATEGIES[t])  # type: ignore [index]
+
         result = cls(**{
-            f.name: draw(cls._STRATEGIES[f.type]) for f in fields(cls)
+            f.name: get_value(f.type) for f in fields(cls)
         })
         assume(result.is_valid())
         return result
@@ -99,12 +104,13 @@ def test_dataclass_construction(args: ArgumentSpec, value: int):
     decorator.
     """
 
-    @_dataclasses_portability.dataclass(**args.to_dict())
+    @dataclass_portable(**args.to_dict())  # type: ignore [call-overload]
     class A:
         i: int
 
     if args.init is False:
-        instance = A()
+        # There is no constructor. Manually assign the value.
+        instance = A()  # type: ignore [call-arg]
         if args.frozen is True:
             object.__setattr__(instance, 'i', value)
         else:

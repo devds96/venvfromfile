@@ -21,7 +21,7 @@ import sys as _sys
 if _sys.version_info >= (3, 8):
     from typing import Literal as _Literal
 else:
-    from typing_extensions import Literal as _Literal
+    from typing_extensions import Literal as _Literal  # type: ignore [assignment] # noqa: E501
 
 from typing import List as _List, Optional as _Optional, \
     overload as _overload, Sequence as _Sequence, Tuple as _Tuple, \
@@ -49,7 +49,9 @@ def load_conf_from_file(path: str) -> VenvConfigRoot:
     Returns:
         VenvConfigRoot: The loaded config root.
     """
-    res = _pydantic_yaml.parse_yaml_file_as(VenvConfigRoot, path)
+    res = _pydantic_yaml.parse_yaml_file_as(  # type: ignore [type-var]
+        VenvConfigRoot, path
+    )
     _logger.debug("The deserialized config root is %s", res)
     return res
 
@@ -74,16 +76,16 @@ def build_conf(conf_path: str, conf: VenvConfig) -> EnvBuilder:
 
 @_overload
 def main(
-    conf_file_path: _Sequence[str],
+    conf_file_paths: _Sequence[str],
     *,
-    ret_builders: _Union[_Literal[False], None] = None
+    ret_builders: _Optional[_Literal[False]] = None
 ) -> int:
     pass
 
 
 @_overload
 def main(
-    conf_file_path: _Sequence[str],
+    conf_file_paths: _Sequence[str],
     *,
     ret_builders: _Literal[True]
 ) -> _Tuple[int, _Sequence[EnvBuilder]]:
@@ -139,12 +141,14 @@ def main(
         for i, venv_config in enumerate(conf.venv_configs):
             dir_name = venv_config.directory
             if not venv_config.is_pyversion_compatible():
+                cver = _pyver.format_version_info(
+                    cv  # type: ignore [arg-type]
+                )
                 _logger.info(
                     f"The environment at index {i} with directory "
                     f"{dir_name!r} is incompatible with the "
                     "current Python version "
-                    f"({_pyver.format_version_info(cv)}) and will be "
-                    "skipped."
+                    f"({cver}) and will be skipped."
                 )
                 continue
             b = build_conf(sf, venv_config)

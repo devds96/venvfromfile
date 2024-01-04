@@ -51,7 +51,7 @@ class TestAppendLinesOnNewLine:
         if len(lines) > 0:
             text += linesep
         with io.BytesIO(b'') as file_raw:
-            file = io.BufferedRandom(file_raw)
+            file = io.BufferedRandom(file_raw)  # type: ignore [arg-type]
             _io_util.append_lines_on_new_line(file, lines, linesep=linesep)
             file_raw.seek(0, io.SEEK_SET)
             assert file_raw.read() == text.encode()
@@ -88,7 +88,7 @@ class TestAppendLinesOnNewLine:
             content_w_linesep = content + linesep
         text = content_w_linesep + c
         with io.BytesIO(content_bytes) as file_raw:
-            file = io.BufferedRandom(file_raw)
+            file = io.BufferedRandom(file_raw)  # type: ignore [arg-type]
             _io_util.append_lines_on_new_line(file, lines, linesep=linesep)
             file_raw.seek(0, io.SEEK_SET)
             assert file_raw.read() == text.encode()
@@ -112,7 +112,7 @@ class TestAppendLinesOnNewLine:
             c = linesep.join(lines) + linesep
         text = linesep + c
         with io.BytesIO(linesep.encode()) as file_raw:
-            file = io.BufferedRandom(file_raw)
+            file = io.BufferedRandom(file_raw)  # type: ignore [arg-type]
             _io_util.append_lines_on_new_line(file, lines, linesep=linesep)
             file_raw.seek(0, io.SEEK_SET)
             assert file_raw.read() == text.encode()
@@ -149,7 +149,7 @@ class TestAppendLinesOnNewLine:
         content_w_linesep = content
         text = content_w_linesep + c
         with io.BytesIO(content_bytes) as file_raw:
-            file = io.BufferedRandom(file_raw)
+            file = io.BufferedRandom(file_raw)  # type: ignore [arg-type]
             _io_util.append_lines_on_new_line(file, lines, linesep=linesep)
             file_raw.seek(0, io.SEEK_SET)
             assert file_raw.read() == text.encode()

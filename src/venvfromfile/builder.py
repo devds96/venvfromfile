@@ -63,6 +63,7 @@ class EnvContext:
         Raises:
             TypeError: If `pkg_or_args` is not a str or an iterable.
         """
+        args: _Tuple[str, ...]
         if isinstance(pkg_or_args, str):
             _logger.debug(f"'_pip_install' called with str {pkg_or_args!r}.")
             args = (pkg_or_args,)
@@ -148,7 +149,7 @@ class EnvContext:
             cls.__qualname__, kwargs
         )
 
-        return cls(**kwargs)
+        return cls(**kwargs)  # type: ignore [arg-type]
 
 
 class EnvBuilder(_venv.EnvBuilder, _conf.VenvConfigExtraDef):
@@ -208,7 +209,7 @@ class EnvBuilder(_venv.EnvBuilder, _conf.VenvConfigExtraDef):
             # The field will be missing in the superclass.
             del kwargs["upgrade_deps"]
 
-        super().__init__(**kwargs)
+        super().__init__(**kwargs)  # type: ignore [arg-type]
 
     def create(self, env_dir: _Union[str, bytes, _PathLike]):
         """The function called in order to create the virtual
@@ -344,7 +345,8 @@ class EnvBuilder(_venv.EnvBuilder, _conf.VenvConfigExtraDef):
         else:
             open_cmd = "a+b"
 
-        with open(file, open_cmd) as ofi:
+        ofi: _io.BufferedRandom
+        with open(file, open_cmd) as ofi:  # type: ignore [assignment]
             if not self.pth_ignore_existing_duplicates:
                 # Remove duplicates.
                 paths = self._remove_existing_pth_paths(
@@ -380,6 +382,7 @@ class EnvBuilder(_venv.EnvBuilder, _conf.VenvConfigExtraDef):
             FileNotFoundError: If a requirements file cannot be found.
         """
         rqfs = self.requirement_files
+        abs_paths: _Sequence[str]
         if rqfs is None:
             rqf_rel = self._REQUIREMENTS_TXT
             rqf = self._resolve_rel_path(rqf_rel)

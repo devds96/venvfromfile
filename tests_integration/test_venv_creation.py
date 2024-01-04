@@ -134,7 +134,7 @@ class VenvHandle:
         cmd_w_exe = itertools.chain((env_exe,), cmd)
         proc_res: subprocess.CompletedProcess[str] = subprocess.run(
             cmd_w_exe, capture_output=True, universal_newlines=True
-        )
+        )  # type: ignore [call-overload]
         rc = proc_res.returncode
         if rc != 0:
             msg = (
@@ -269,7 +269,7 @@ def venv_handle(request: FixtureRequest):
                 kwargs[p] = param[p]
             except KeyError:
                 pass
-    with venv_handle_create(**kwargs) as vh:
+    with venv_handle_create(**kwargs) as vh:  # type: ignore [arg-type]
         yield vh
 
 

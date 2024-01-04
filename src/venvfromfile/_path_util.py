@@ -10,9 +10,7 @@ from typing import Optional as _Optional, Union as _Union
 
 
 def to_str_path(
-    path: _Union[
-        str, bytes, bytearray, memoryview, _PathLike
-    ],
+    path: _Union[str, bytes, bytearray, memoryview, _PathLike],
     *,
     encoding: _Optional[str] = None
 ) -> str:
@@ -36,7 +34,7 @@ def to_str_path(
             encoding = _sys.getfilesystemencoding()
         # It might be necessary to implement more elaborate decoding.
         path = path.decode(encoding)
-    return path
+    return path  # type: ignore [return-value]
 
 
 _norm_funcs = (
@@ -60,7 +58,9 @@ def norm_fully(path: str) -> str:
     if not _ospath.isabs(path):
         raise ValueError(f"The provided pat {path!r} was not absolute.")
     return _functools.reduce(
-        lambda p, f: f(p), _norm_funcs, path
+        lambda p, f: f(p),  # type: ignore [operator]
+        _norm_funcs,
+        path
     )
 
 

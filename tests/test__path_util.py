@@ -5,7 +5,7 @@ import sys
 
 from hypothesis import assume, given
 from hypothesis.strategies import composite, DrawFn, sampled_from
-from hypothesis_fspaths import fspaths
+from hypothesis_fspaths import fspaths  # type: ignore [import]
 from os import PathLike
 from typing import Union
 
@@ -53,6 +53,8 @@ def fspaths_decodable(draw: DrawFn) -> Path:
         except UnicodeDecodeError:
             pass
     assume(False)
+    # Failsafe, in case assume does something unexpected
+    raise AssertionError
 
 
 class TestToStrPath:

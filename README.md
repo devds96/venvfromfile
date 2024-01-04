@@ -1,6 +1,9 @@
 # venvfromfile
 
 ![Tests](https://github.com/devds96/venvfromfile/actions/workflows/tests.yml/badge.svg)
+![mypy](https://github.com/devds96/venvfromfile/actions/workflows/type.yml/badge.svg)
+![flake8](https://github.com/devds96/venvfromfile/actions/workflows/lint.yml/badge.svg)
+
 
 A simple runnable Python package that sets up virtual environments as
 specified in a configuration file using the builtin `venv` module.

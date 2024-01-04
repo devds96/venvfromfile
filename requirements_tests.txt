@@ -1,6 +1,8 @@
+flake8
 hypothesis
 hypothesis-fspaths
 more_itertools
+mypy
 pydantic
 pydantic-yaml
 pytest

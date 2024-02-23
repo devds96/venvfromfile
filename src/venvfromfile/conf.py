@@ -141,7 +141,7 @@ class VenvConfigExtraDef:
     .pth file. Relative paths will be stored as relative paths in the
     .pth file."""
 
-    pth_file: str = ".pth"
+    pth_file: _Optional[str] = None
     """The name of the .pth file. If the file already exists, the
     paths will be appended at the end of the file."""
 
@@ -188,6 +188,17 @@ class VenvConfigExtraDef:
             raise
         except TypeError as e:
             raise ValueError(f"(from {type(e).__name__}) {str(e)}")
+
+    def get_pth_file_name(self) -> str:
+        """Get the .pth file name to use. Defaults to "<directory>.pth".
+
+        Returns:
+            str: The name of the .pth file, including the file ending.
+        """
+        name = self.pth_file
+        if name is not None:
+            return name
+        return f"{self.directory}.pth"
 
 
 @_dataclass(frozen=True, config=_config, slots=True)

@@ -338,7 +338,9 @@ class EnvBuilder(_venv.EnvBuilder, _conf.VenvConfigExtraDef):
             return p
 
         paths: _Iterable[str] = map(sanitize_path, pths)
-        file = _ospath.join(site_dir, self.pth_file)
+        pth_file_name = self.get_pth_file_name()
+        _logger.debug(f".pth file name: {pth_file_name}")
+        file = _ospath.join(site_dir, pth_file_name)
 
         if self.pth_lock_file_exclusive:
             open_cmd = "x+b"

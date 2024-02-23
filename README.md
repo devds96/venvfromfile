@@ -27,12 +27,13 @@ at least Python 3.7 is used. The directory will be named
 "venv@venvfromfile" and requirements from a file "requirements.txt"
 which should be placed next to the configuration file will be installed
 in the virtual environment.
-Additionally, a file ".pth" is installed in the virtual environment
-containing the path to the directory "src" relative to the configuration
-file. This instructs Python to search this path for installed packages
-when importing. More information on `.pth` files can be found in the
-[documentation of the `site`](https://docs.python.org/3/library/site.html)
-module (builtin).
+Additionally, a file "venv@venvfromfile.pth" is installed in the virtual
+environment containing the path to the directory "src" relative to the
+configuration file. This instructs Python to search this path for
+installed packages when importing. More information on `.pth` files can
+be found in the
+[documentation of the `site` module](https://docs.python.org/3/library/site.html)
+(builtin).
 
 Note that all relative paths specified in the configuration files are
 interpreted relative to the configuration file. This includes, for

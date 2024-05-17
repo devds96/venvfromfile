@@ -403,11 +403,16 @@ class EnvBuilder(_venv.EnvBuilder, _conf.VenvConfigExtraDef):
                 if not _ospath.isabs(path):
                     path = self._resolve_rel_path(path)
                 if not _ospath.isfile(path):
-                    raise FileNotFoundError(
-                        f"Requirements file {path!r} not found."
+                    _logger.warning(
+                        f"The requirements file {path!r} was not found."
                     )
+                    continue
                 labs_paths.append(path)
             abs_paths = tuple(labs_paths)
+
+        if len(abs_paths) == 0:
+            _logger.info("No requirement files remain.")
+            return
 
         cmd_parts = [s for path in abs_paths for s in ("-r", path)]
 
